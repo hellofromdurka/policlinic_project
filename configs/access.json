@@ -1,0 +1,46 @@
+{
+    "headdoctor": [
+        "show_reports_handler_POST",
+        "show_reports_handler_GET",
+        "reports_index_handler",
+        "show_reports_diagnosis_handler_GET",
+        "show_reports_diagnosis_handler_POST",
+        "reports_index",
+        "view_report"
+    ],
+    "department_heads": [
+        "report_create_docs",
+        "reports_index_handler",
+        "show_reports_handler_POST",
+        "show_reports_handler_GET",
+        "report_create_diagnosis",
+        "show_reports_diagnosis_handler_GET",
+        "show_reports_diagnosis_handler_POST",
+        "reports_index",
+        "view_report",
+        "create_report"
+    ],
+    "doctors": [
+        "show_visit_handler",
+        "add_visit_handler"
+    ],
+    "administrators": [
+        "show_timetable_handler",
+        "add_appearance_handler",
+        "search_timetable_by_date_handler_GET",
+        "search_timetable_by_date_handler_POST",
+        "search_timetable_by_doc_handler_GET",
+        "search_timetable_by_doc_handler_POST",
+        "search_timetable_by_patient_handler_GET",
+        "search_timetable_by_patient_handler_POST",
+        "search_timetable_by_spec_handler_GET",
+        "search_timetable_by_spec_handler_POST"
+    ],
+    "patients": [
+        "index_appointment",
+        "show_appointment_handler",
+        "delete_appointment_handler",
+        "delete_current_appointment",
+        "create_order"
+    ]
+}

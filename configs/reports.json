@@ -1,0 +1,14 @@
+[
+    {
+        "rep_name": "Отчет по посещаемости",
+        "rep_id": "1",
+        "procedure": "doc_visit_report",
+        "sql_statement": "select_reports.sql"
+    },
+    {
+        "rep_name": "Отчет по заболеваемости",
+        "rep_id": "2",
+        "procedure": "diagnosis_report",
+        "sql_statement": "select_reports2.sql"
+    }
+]

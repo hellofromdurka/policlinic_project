@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Корзина</title>
+    <style>
+        tbody {
+            max-height: 30vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: block;
+            min-width: 700px;
+        }
+
+        td {
+            min-width: 150px;
+            height: 0;
+        }
+    </style>
+</head>
+
+<form action="/basket/add" method="POST" id="add_product"></form>
+
+<body>
+    <div class="infodiv" id="info">
+        <table class="bigtable">
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Подтверждение записи на прием
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Принимающий врач</th>
+                <th>Специальность врача</th>
+                <th>Кабинет</th>
+                <th>Пациент</th>
+                <th></th>
+            </tr>
+            <tbody>
+                {% for t in timetable %}
+                <tr>
+                    <td> {{ t['appointment_date'] }} </td>
+                    <td> {{ t['appointment_time'] }} </td>
+                    <td> {{ t['passport'] }} </td>
+                    <td> {{ t['specialization'] }} </td>
+                    <td> {{ t['appointment_room'] }} </td>
+                    <td> {{ t['appointment_patient'] }} </td>
+                    <td style="padding: 0;" colspan="1">
+                        <form action="/appointment/delete-current" method="POST">
+                            <input type="hidden" name="timetable_id" value="{{ t['timetable_id'] }}">
+                            <input type="submit" value="Удалить">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table>
+            <tr>
+                <td style="padding: 0;" colspan="3">
+                    <form action="/appointment/create-order" method="POST">
+                        <input type="submit" value="Подтвердить запись">
+                    </form>
+                </td>
+                <td style="padding: 0;" colspan="3">
+                    <form action="/appointment/delete">
+                        <input type="submit" value="Очистить список приемов">
+                    </form>
+                </td>
+                <td style="padding: 0;" colspan="3">
+                    <form action="/appointment">
+                        <input type="submit" value="Вернуться назад">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="errordiv" id="error">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <script>
+        window.onload = function () {
+            const infodiv = document.querySelector('#info');
+            const errordiv = document.querySelector('#error');
+            const creatediv = document.querySelector('#create');
+
+            if (errordiv) {
+                errordiv.style.width = getComputedStyle(infodiv).width;
+            }
+
+            if (creatediv) {
+                creatediv.style.width = getComputedStyle(infodiv).width;
+            }
+        }
+    </script>
+</body>
+
+</html>

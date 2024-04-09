@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск по дате</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+    <table>
+        <tr>
+            <th colspan="2">Поиск по дате</th>
+        </tr>
+        <tr>
+            <form method="POST">
+                <td>
+                    <input type="date" min="2023-02-01" max="2024-01-01" name="date" placeholder="Дата приема">
+                </td>
+                <td>
+                    <input type="submit" value="Поиск">
+                </td>
+            </form>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <form action="/timetable">
+                    <input type="submit" value="Вернуться к полному расписанию">
+                </form>
+            </td>
+        </tr>
+        {% if error %}
+        <tr>
+            <td colspan="2" style="background-color: rgb(243, 94, 94);">
+                {% if error == 13 %}
+                <div class="error">Некорректный ввод!</div>
+                {% else %}
+                <div class="error">Запись не найдена!</div>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+    </div>
+    <br>
+    <div class="infodiv" id="info">
+    <table>
+        {% if timetable %}
+        <tr>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Посещение</th>
+            <th>Принимающий врач</th>
+            <th>Пациент</th>
+            <th>Кабинет</th>
+        </tr>
+        {% for t in timetable %}
+        <tr>
+            <td> {{ t['appointment_date'] }} </td>
+            <td> {{ t['appointment_time'] }} </td>
+            {% if t['appearance'] == None %}
+                <td> </td>
+            {% else %}
+                <td> {{ t['appearance'] }} </td>
+            {% endif %}
+            <td> {{ t['passport'] }} </td>
+            <td> {{ t['appointment_patient'] }} </td>
+            <td> {{ t['appointment_room'] }} </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+
+    </table>
+    </div>
+</body>
+
+</html>

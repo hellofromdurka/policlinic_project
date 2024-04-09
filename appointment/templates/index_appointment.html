@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Запись на прием</title>
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+        <table class="bigtable">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        Свободные окна для записи
+                    </th>
+                </tr>
+                
+            </thead>
+            
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Принимающий врач</th>
+                <th>Специальность врача</th>
+                <th>Кабинет</th>
+                <th>Пациент</th>
+                <th></th>
+            </tr>
+            <tbody>
+                {% for t in timetable %}
+                <tr>
+                    <td> {{ t['appointment_date'] }} </td>
+                    <td> {{ t['appointment_time'] }} </td>
+                    <td> {{ t['passport'] }} </td>
+                    <td> {{ t['specialization'] }} </td>
+                    <td> {{ t['appointment_room'] }} </td>
+                    <form method="POST" action="/appointment">
+                        <td>
+                            <input type="text" placeholder="Номер карты пациента" name="card_number">
+                        </td>
+                        <td> 
+                            <input type="submit" value="Записаться"> 
+                            <input type="hidden" name="timetable_id" value="{{ t['timetable_id'] }}">
+                            <input type="hidden" name="appointment_date" value="{{ t['appointment_date'] }}">
+                            <input type="hidden" name="appointment_time" value="{{ t['appointment_time'] }}">
+                            <input type="hidden" name="passport" value="{{ t['passport'] }}">
+                            <input type="hidden" name="specialization" value="{{ t['specialization'] }}">
+                            <input type="hidden" name="appointment_room" value="{{ t['appointment_room'] }}">
+                        </td>
+                    </form>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table>
+                <tr>
+                    <td style="padding: 0;">
+                        <form action="/appointment/show">
+                            <input type="submit" style="width: 100%; height: 50px;" value="Перейти к подтверждению записей">
+                        </form>
+                    </td>
+                    <td style="padding: 0;">
+                        <form action="/">
+                            <input type="submit" style="width: 100%; height: 50px;" value="Вернуться к списку возможностей">
+                        </form>
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error' %}
+    <div class="errordiv" id="error">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% if create_flag %}
+    <div class="creatediv" id="create">
+        Запись добавлена в список
+    </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    {% if category == 'create_order' %}
+    <div class="creatediv" id="create">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endwith %}
+
+    <script>
+        setTimeout(function () {
+            var createDiv = document.getElementById('create');
+            var opacity = 1;  // начальная прозрачность
+            var timer = setInterval(function () {
+                if (opacity <= 0.1) {
+                    clearInterval(timer);
+                    createDiv.style.display = 'none';
+                }
+                createDiv.style.opacity = opacity;
+                createDiv.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+                opacity -= opacity * 0.1;
+            }, 50);
+        }, 1000);
+
+        window.onload = function () {
+            const infodiv = document.querySelector('#info');
+            const errordiv = document.querySelector('#error');
+            const creatediv = document.querySelector('#create');
+
+            if (errordiv) {
+                errordiv.style.width = getComputedStyle(infodiv).width;
+            }
+
+            if (creatediv) {
+                creatediv.style.width = getComputedStyle(infodiv).width;
+            }
+        }
+    </script>
+</body>
+
+</html>

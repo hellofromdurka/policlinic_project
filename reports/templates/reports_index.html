@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Работа с отчетами</title>
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Меню отчетов
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>
+                        {{ report['rep_name'] }}
+                    </td>
+                    <td class="no-padding">
+                        <form action="{{ url_for('reports_app.view_report') }}">
+                            <input type="hidden" name="rep_id" value="{{ report['rep_id'] }}">
+                            <input type="submit" value="Просмотреть">
+                        </form>
+                    </td>
+                    {% if session['role'] == 'department_heads' %}
+                    <td class="no-padding">
+                        <form action="{{ url_for('reports_app.create_report') }}">
+                            <input type="hidden" name="rep_id" value="{{ report['rep_id'] }}">
+                            <input type="submit" value="Создать">
+                        </form>
+                    </td>
+                </tr>                
+                {% endif %}
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <table>
+            <tr text-align="center">
+                <td style="padding: 0;" colspan="3">
+                    <form action="/">
+                        <input type="submit" value="Вернуться на главную">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const infodiv = document.querySelector('#info');
+        const errordiv = document.querySelector('#error');
+        errordiv.style.width = getComputedStyle(infodiv).width;
+    </script>
+</body>
+
+</html>

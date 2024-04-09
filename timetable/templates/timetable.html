@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Расписание</title>
+</head>
+
+<body>
+    <div>
+        <table>
+            <tr>
+                <td style="padding: 0;">
+                    <form action="/">
+                        <input type="submit" value="Вернуться к списку возможностей">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 0;">
+                    <form action="/timetable/search-by-date">
+                        <input type="submit" value="Поиск по дате">
+                    </form>
+                </td>
+                <td style="padding: 0;">
+                    <form action="/timetable/search-by-doc">
+                        <input type="submit" value="Поиск по фамилии врача">
+                    </form>
+                </td>
+                <td style="padding: 0;">
+                    <form action="/timetable/search-by-spec">
+                        <input type="submit" value="Поиск по специальности врача">
+                    </form>
+                </td>
+                <td style="padding: 0;">
+                    <form action="/timetable/search-by-patient">
+                        <input type="submit" value="Поиск по фамилии пациента">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="infodiv" id="info">
+        <table >
+            <thead>
+                <tr>
+                    <th>
+                        Расписание
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                    <th width="150px">Дата</th>
+                    <th width="150px">Время</th>
+                    <th width="200px">Посещение</th>
+                    <th width="170px">Принимающий врач</th>
+                    <th width="170px">Специальность</th>
+                    <th width="90px">Пациент</th>
+                    <th width="90px">Кабинет</th>
+                </tr>
+                {% for item in result %}
+                <tr>
+                    <td width="150px">{{ item['appointment_date'] }}</td>
+                    <td width="150px">{{ item['appointment_time'] }}</td>
+                    {% if item['appearance'] == None %}
+                    <form id="addapp" method="POST" action="/timetable/add-appearance">
+                        <td width="200px">
+                            <input type="text" placeholder="Посещение" name="appearance">
+                            <input type="submit" value="Подтвердить" form="addapp" name={{ item['timetable_id'] }}>
+                        </td>
+                    </form>
+                    {% else %}
+                        <td width="200px">{{ item['appearance'] }}</td>
+                    {% endif %}
+                    <td width="170px">{{ item['passport'] }}</td>
+                    <td width="170px">{{ item['specialization'] }}</td>
+                    {% if item['appointment_patient'] == None %}
+                        <td width="50px"> </td>
+                    {% else %}
+                        <td width="50px">{{ item['appointment_patient'] }}</td>
+                    {% endif %}
+                    <td width="50px">{{ item['appointment_room'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error' %}
+    <div class="errordiv" id="error">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <br>
+    <script>
+        const infodiv = document.querySelector('#info');
+        const errordiv = document.querySelector('#error');
+        errordiv.style.width = getComputedStyle(infodiv).width;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Список возможностей</title>
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+        <table>
+            <tr>
+                <th>
+                    Список возможностей
+                </th>
+            </tr>
+            {% if role == 'headdoctor' or role == 'department_heads' %}
+            <tr>
+                <td>
+                    <a href="/all/reports">Работа с отчётами</a>
+                </td>
+            </tr>
+            {% endif %}
+            {% if role == 'administrators' %}
+            <tr>
+                <td>
+                    <a href="/all/timetable">Показать расписание</a>
+                </td>
+            </tr>
+            {% endif %}
+            {% if role == 'doctors' %}
+            <tr>
+                <td>
+                    <a href="/all/visit">Заполнить карту приема</a>
+                </td>
+            </tr>
+            {% endif %}
+            {% if role == 'patients' %}
+            <tr>
+                <td>
+                    <a href="/all/appointment">Записаться на прием</a>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td style="padding: 0;">
+                    <form action="/">
+                        <input type="submit" value="Вернуться на главную">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% if message %}
+    <div class="errordiv" id="error">
+        {{ message }}
+    </div>
+    {% endif %}
+    <script>
+        const infodiv = document.querySelector('#info');
+        const errordiv = document.querySelector('#error');
+        errordiv.style.width = getComputedStyle(infodiv).width;
+    </script>
+</body>
+
+</html>

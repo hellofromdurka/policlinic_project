@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр отчетов</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+    <table>
+        <tr>
+            <th colspan="2">{{ name }} (Просмотреть)</th>
+        </tr>
+        <tr>
+            <form action="{{ url_for('reports_app.view_report') }}" method="POST">
+                <td>
+                    <input type="month" min="2023-01" max="2024-01" name="date" placeholder="Отчетный период">
+                    <input type="hidden" name="rep_id" value="{{ rep_id }}">
+                </td>
+                <td>
+                    <input type="submit" value="Поиск">
+                </td>
+            </form>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <form action="/reports">
+                    <input type="submit" value="Вернуться к выбору отчета">
+                </form>
+            </td>
+        </tr>
+    </table>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="message">
+                {% if category == 'okay' %}
+                <div class="okay">
+                    {{ message }}
+                </div>
+                {% endif %}
+                {% if category == 'error' %}
+                <div class="errordiv">
+                    {{ message }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    <br>
+    {% if reports %}
+    <div class="infodiv" id="info">
+    <table>
+        {% if rep_id == '1' %}
+        <tr>
+            <th>Год</th>
+            <th>Месяц</th>
+            <th>Фамилия врача</th>
+            <th>Количество посещений</th>
+        </tr>
+        {% for r in reports %}
+        <tr>
+            <td> {{ r['rep_year'] }} </td>
+            <td> {{ r['rep_month'] }} </td>
+            <td> {{ r['passport'] }} </td>
+            <td> {{ r['count_visit'] }} </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        {% if rep_id == '2' %}
+        <tr>
+            <th>Год</th>
+            <th>Месяц</th>
+            <th>Диагноз</th>
+            <th>Количество заболевших</th>
+        </tr>
+        {% for r in reports %}
+        <tr>
+            <td> {{ r['rep_year'] }} </td>
+            <td> {{ r['rep_month'] }} </td>
+            <td> {{ r['rep_diagnosis'] }} </td>
+            <td> {{ r['count_patients'] }} </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+    </div>
+    {% endif %}
+</body>
+
+</html>

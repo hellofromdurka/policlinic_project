@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="/static/style.css">
+    <title>Приемы</title>
+</head>
+
+<body>
+    <div class="infodiv" id="info">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Приемы
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                    <th>Дата</th>
+                    <th>Диагноз</th>
+                    <th>Жалобы</th>
+                    <th>Назначение</th>
+                    <th>Принимающий врач</th>
+                    <th>Номер карты пациента</th>
+                    <th></th>
+                </tr>
+            {% for item in result %}
+            <tr>
+                <td width="150px">{{ item['visit_date'] }}</td>
+                {% if item['diagnosis'] == None %}
+                    <form id="addvisit" method="POST" action="/visit/add-visit">
+                        <td>
+                            <input type="text" placeholder="Диагноз" name="diagnosis">
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Жалобы" name="complaints">
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Назначения" name="prescription">
+                        </td>
+                    </form>
+                {% else %}
+                    <td>{{ item['diagnosis'] }}</td>
+                    <td>{{ item['complaints'] }}</td>
+                    <td>{{ item['prescription'] }}</td>
+                {% endif %}
+                <td width="70px">{{ item['docs_visit'] }}</td>
+                <td width="70px">{{ item['card_visit'] }}</td>
+                <td>
+                    <input type="submit" value="Подтвердить" form="addvisit" name={{ item['visit_id'] }}>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td style="padding: 0;">
+                    <form action="/">
+                        <input type="submit" value="Вернуться к списку возможностей">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    <div class="errordiv" id="error">
+        {{ message }}
+    </div>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <br>
+    <script>
+        const infodiv = document.querySelector('#info');
+        const errordiv = document.querySelector('#error');
+        errordiv.style.width = getComputedStyle(infodiv).width;
+    </script>
+</body>
+
+</html>
